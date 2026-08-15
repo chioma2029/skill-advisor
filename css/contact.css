@@ -78,7 +78,7 @@ textarea.contact-message {
 
 /* The single primary action sits below the last field. */
 .contact-form .btn-primary {
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
 }
 
 /* The post-submit confirmation reads like a conversational reply — display

@@ -68,9 +68,15 @@
    when the control set reduces to Play/Pause + Replay. Use the token
    gap scale to match other spacing. */
 .audio-control-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
+   display: flex;
+   align-items: center;
+   gap: var(--space-3);
+   flex-wrap: wrap;
+}
+
+/* Ensure audio controls keep breathing room from surrounding content */
+.quiz-audio .audio-control-row {
+   margin-top: var(--space-3);
 }
 
 /* Mobile touch targets: ensure minimum hit area across small widths. */
@@ -207,14 +213,16 @@
    -------------------------------------------------------------------------- */
 
 /* Desktop (≥1024px): 2px vertical rail, full viewport height, fixed at the
-   left edge beside the question content (§4/§7). */
+    left edge beside the question content (§4/§7). */
 .throughline {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 2px;
-  height: 100vh;
-  background-color: var(--line);
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 2px;
+   height: 100vh;
+   background-color: var(--line);
+   z-index: 100;
+   pointer-events: none;
 }
 
 /* Inner fill segment — starts empty; intake/quiz JS sets
@@ -255,6 +263,41 @@
    flex: 0 0 auto;
 }
 
+/* Mobile: stack nav controls vertically to avoid overlap and keep
+    comfortable tappable areas on narrow phones (<= 414px). */
+@media (max-width: 414px) {
+   .nav-controls {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-4);
+   }
+   .nav-controls > * {
+      width: 100%;
+      flex: 0 0 auto;
+   }
+   .nav-controls .btn-primary {
+      width: 100%;
+   }
+}
+
+/* Hotspot image and overlay basics — ensure the image scales and the
+    percentage-positioned overlay aligns at all widths. */
+.hotspot-image {
+   display: block;
+   width: 100%;
+   height: auto;
+}
+.hotspot-overlay {
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+}
+.hotspot-container {
+   position: relative;
+}
+
 /* --------------------------------------------------------------------------
     Results page link layout tweaks
     Ensure each bottom link is its own block-level element and add a
@@ -291,8 +334,8 @@
     -------------------------------------------------------------------------- */
 .site-home {
    position: fixed;
-   top: var(--space-2);
-   left: calc(var(--space-2) + 8px);
+   top: var(--space-3);
+   left: var(--space-3);
    z-index: 1000;
    display: inline-block;
    color: var(--moss);
@@ -300,14 +343,17 @@
    font-size: var(--text-label);
    font-weight: var(--weight-label);
    text-decoration: underline;
+   padding: 6px;
+   min-width: 44px;
+   min-height: 44px;
 }
 
 @media (max-width: 1023px) {
    /* On mobile the throughline becomes a top bar; ensure the Home link
        sits clearly below it and never overlaps. */
    .site-home {
-      top: calc(var(--space-2) + 6px);
-      left: var(--space-2);
+      top: calc(var(--space-3) + 6px);
+      left: var(--space-3);
    }
 }
 
