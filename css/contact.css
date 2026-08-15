@@ -1,0 +1,91 @@
+/* ==========================================================================
+   CONTACT.CSS — contact-page layout only (contact.html)
+   Implements design.md §7: contact is explicitly a TRADITIONAL support form
+   (the one-thing-at-a-time discipline is relaxed here), but it keeps the
+   same hairline-border input style, type system, and restraint. It reuses
+   .input-underline, .error-message, and .btn-primary from components.css —
+   no new visual language is introduced. Positioning and contact-specific
+   rhythm only; tokens live in tokens.css.
+   ========================================================================== */
+
+/* Centered single column, max ~560px (the intake/quiz column width), so the
+   form reads as part of the same product. margin:auto centers and degrades
+   to top-aligned if the content outgrows a short viewport. */
+.contact-screen {
+  display: flex;
+  min-height: calc(100vh - var(--space-6));
+}
+
+.contact-container {
+  margin: auto;
+  width: 100%;
+  max-width: 560px;
+}
+
+/* §5 — page headline (Spectral 500) already styled by base.css; set the
+   rhythm below it. */
+.contact-container h1 {
+  margin-bottom: var(--space-2); /* 16px headline → byline */
+}
+
+/* A quiet line of author/project details. Small (13px, §5) and set in --ink
+   so it reads as metadata without competing with the headline. No opacity
+   wash is used: dimming the --moss links below full strength would drop
+   them under the §10 WCAG AA contrast floor, so restraint here comes from
+   size, not transparency. Links keep the §3 treatment (--moss, plain
+   underline). */
+.contact-byline {
+  font-size: var(--text-error); /* 13px — supporting metadata, §5 */
+  line-height: var(--leading-body);
+  color: var(--ink);
+  margin-bottom: var(--space-5); /* 40px byline → form */
+}
+
+.contact-byline a {
+  color: var(--moss);
+  text-decoration: underline;
+}
+
+/* §7 — a traditional form shows all its fields at once. Each field stacks a
+   visible label, the shared .input-underline control, and the shared
+   .error-message slot. 24px between fields (8px unit). */
+.contact-field {
+  margin-bottom: var(--space-3);
+}
+
+/* Visible field label. Contact is a multi-field support form, so each field
+   is named on screen — unlike the conversational intake where the question
+   IS the label. Uses the §5 label role (Archivo 15px / 600 / 0.01em). This
+   is also the §10-accessible choice: every control has a real, perceivable
+   label. */
+.contact-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: var(--weight-label);
+  letter-spacing: var(--tracking-label);
+  margin-bottom: var(--space-1);
+}
+
+/* The message field is a <textarea> that reuses the .input-underline class
+   for identical border/focus behaviour; it only needs height and vertical
+   resize on top. */
+textarea.contact-message {
+  min-height: 120px;
+  resize: vertical;
+  line-height: var(--leading-body);
+}
+
+/* The single primary action sits below the last field. */
+.contact-form .btn-primary {
+  margin-top: var(--space-1);
+}
+
+/* The post-submit confirmation reads like a conversational reply — display
+   face, same scale as a question prompt (§5). */
+.contact-confirmation {
+  font-family: var(--font-display);
+  font-size: var(--text-question);
+  font-weight: var(--weight-question);
+  line-height: 1.3;
+}

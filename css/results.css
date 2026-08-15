@@ -1,0 +1,89 @@
+/* ==========================================================================
+   RESULTS.CSS — results-page layout only (results.html)
+   Implements design.md §7 (results layout — the one screen that shows the
+   full picture at once) and §4 (the throughline resolves to a static, full
+   line). Positioning and results-specific rhythm only: tokens live in
+   tokens.css, shared components (.throughline, .btn-text) in
+   components.css. No new visual language is introduced here.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   §4 — throughline resolution. On the results page the journey is complete,
+   so the line stops animating and sits fully filled. One modifier on top of
+   the shared component: force the fill to 100% and remove its transition.
+   -------------------------------------------------------------------------- */
+.throughline-complete .throughline-fill {
+  --throughline-progress: 100%;
+  transition: none;
+}
+
+/* --------------------------------------------------------------------------
+   §7 — results layout. Single centered column, max ~640px. margin:auto
+   centers the column vertically and horizontally, and degrades to
+   top-aligned — never clipped — if the content outgrows a short viewport.
+   The calc() subtracts the top + bottom body padding set in base.css.
+   -------------------------------------------------------------------------- */
+.results-screen {
+  display: flex;
+  min-height: calc(100vh - var(--space-6));
+}
+
+.results-container {
+  margin: auto;
+  width: 100%;
+  max-width: 640px;
+}
+
+/* §7 order: headline → feedback paragraph → chart → next step → contact
+   link. Vertical rhythm uses multiples of the 8px unit throughout. The h1
+   itself is styled by base.css (§5 page headline, Spectral 500). */
+.results-container h1 {
+  margin-bottom: var(--space-3); /* 24px headline → feedback */
+}
+
+/* §5 — body role (Archivo, 17px desktop / 16px mobile, line-height 1.6)
+   applied through tokens for the descriptive feedback paragraph. */
+.results-feedback {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  margin-bottom: var(--space-4); /* 32px feedback → chart */
+}
+
+/* §8 — the hand-rolled bar chart. Width fills the column; height is fixed
+   so four horizontal bars have breathing room. results.js sizes the backing
+   store to this box at runtime (responsive, redrawn on resize). */
+.results-chart {
+  display: block;
+  width: 100%;
+  height: 220px;
+  margin-bottom: var(--space-4); /* 32px chart → next step */
+}
+
+/* §5 — body role again for the single next-step recommendation sentence. */
+.results-nextstep {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  margin-bottom: var(--space-4); /* 32px next step → contact link */
+}
+
+/* §7 — the "Contact an Adviser" path is a secondary text link (.btn-text,
+   components.css), never a competing button. It simply needs to start on
+   its own line, which the block paragraph above already guarantees. */
+
+/* --------------------------------------------------------------------------
+   §10 — visually-hidden ("sr-only") content. Deliberately NOT display:none:
+   the element stays in the accessibility tree and is announced by screen
+   readers, while being removed from visual layout with the standard 1px
+   clip technique. Used for the text alternative to the canvas chart.
+   -------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

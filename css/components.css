@@ -1,0 +1,332 @@
+/* ==========================================================================
+   COMPONENTS.CSS — SHARED COMPONENT STYLES
+   Every value below is sourced from tokens.css per design.md §8.
+   No hard-coded colors, sizes, or durations.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   .btn-primary — primary CTA (design.md §8 "Buttons")
+   Filled --moss background, --paper text, 2px radius, no shadow,
+   12px vertical / 24px horizontal padding. Typography is the §5
+   button/label role: Archivo 15px / 600 / 0.01em, sentence case.
+   -------------------------------------------------------------------------- */
+.btn-primary {
+  display: inline-block;
+  background-color: var(--moss);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 24px;
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: var(--weight-label);
+  letter-spacing: var(--tracking-label);
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity var(--duration-press) var(--ease-out);
+}
+
+/* Press feedback — design.md §6: 100ms opacity dip to 0.85, no scale
+   transform, no bounce. */
+.btn-primary:active {
+  opacity: 0.85;
+}
+
+/* --------------------------------------------------------------------------
+    Quiz option buttons and touch targets
+    - .quiz-option: plain list-like button used for multiple-choice answers.
+    - On mobile ensure a comfortable tappable area (~44px) per §10.
+    -------------------------------------------------------------------------- */
+.quiz-options .quiz-option {
+   display: block;
+   width: 100%;
+   text-align: left;
+   padding: 12px;
+   background: transparent;
+   border: none;
+   border-bottom: 1px solid var(--line);
+   font-family: var(--font-body);
+   font-size: var(--text-body);
+   cursor: pointer;
+}
+
+/* Audio control buttons: ensure they are comfortably tappable and
+    visually minimal per design.md §2 (no decorative boxes). */
+.audio-control-row button {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   width: 44px;
+   height: 44px;
+   padding: 6px;
+   background: transparent;
+   border: none;
+   cursor: pointer;
+}
+
+/* Layout for audio controls: keep buttons aligned and evenly spaced
+   when the control set reduces to Play/Pause + Replay. Use the token
+   gap scale to match other spacing. */
+.audio-control-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Mobile touch targets: ensure minimum hit area across small widths. */
+@media (max-width: 767px) {
+   .btn-primary,
+   .quiz-options .quiz-option,
+   .audio-control-row button {
+      min-height: 44px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+   }
+}
+
+/* Hotspot region hover/focus/selected states. Regions are plain buttons
+    positioned absolutely over an image; styling here keeps the visual
+    feedback minimal per anti-slop rules and ensures keyboard focus uses
+    the global focus-visible ring. */
+.hotspot-region:hover {
+   outline: 1px solid var(--line);
+}
+.hotspot-region:focus-visible {
+   outline: 2px solid var(--moss);
+   outline-offset: 2px;
+}
+.hotspot-region.hotspot-selected {
+   outline: 2px solid var(--moss);
+}
+
+/* --------------------------------------------------------------------------
+   .btn-text — secondary text action (design.md §8: "plain underlined text
+   in --moss, no button chrome at all"; §7: "Contact an Adviser" is a text
+   link, never a competing CTA). Understated by design — no background,
+   no border, no button styling.
+   -------------------------------------------------------------------------- */
+.btn-text {
+  display: inline;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--moss);
+  font-family: var(--font-body);
+  font-size: var(--text-label);
+  font-weight: var(--weight-label);
+  letter-spacing: var(--tracking-label);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   .input-underline — conversational single input (design.md §8 "Text
+   input"). The question itself is the label, so there is no visible label
+   element: transparent background, 1px --line bottom border at rest,
+   growing to 2px --moss on focus over 150ms (§6 — no glow, no shadow).
+   Archivo 17px via --text-body.
+   -------------------------------------------------------------------------- */
+.input-underline {
+  width: 100%;
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  /* Reserves the 1px the focus border grows into, so nothing below the
+     input shifts when focus changes. */
+  margin-bottom: 1px;
+  padding: var(--space-1) 0;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-body);
+  color: var(--ink);
+  transition: border-color var(--duration-focus) var(--ease-out),
+              border-bottom-width var(--duration-focus) var(--ease-out);
+}
+
+/* Focus state — design.md §6: border transitions --line → --moss over
+   150ms. The global :focus-visible ring in base.css (§10) still applies. */
+.input-underline:focus {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--moss);
+  margin-bottom: 0;
+}
+
+/* Placeholder — design.md §8: muted example content, --ink at 35%
+   opacity. */
+.input-underline::placeholder {
+  color: var(--ink);
+  opacity: 0.35;
+}
+
+/* --------------------------------------------------------------------------
+   Validation states (design.md §8 "Inline validation", §3 color rules)
+   -------------------------------------------------------------------------- */
+
+/* .is-valid — border becomes --moss. No checkmark icon: anti-slop §2 says
+   the color change is sufficient feedback. */
+.input-underline.is-valid,
+.input-underline.is-valid:focus {
+  border-bottom-color: var(--moss);
+}
+
+/* .is-invalid — border becomes --brick, and stays --brick on focus
+   (design.md §6: focus transitions to --brick when invalid). */
+.input-underline.is-invalid,
+.input-underline.is-invalid:focus {
+  border-bottom-color: var(--brick);
+}
+
+/* Error message — design.md §5 error row + §8: Archivo 13px / 500 in
+   --brick, directly below the input. Fades in over 150ms; a later JS
+   batch toggles .is-visible to trigger the fade. */
+.error-message {
+  display: block;
+  margin-top: var(--space-1);
+  font-family: var(--font-body);
+  font-size: var(--text-error);
+  font-weight: var(--weight-error);
+  color: var(--brick);
+  opacity: 0;
+  transition: opacity var(--duration-focus) var(--ease-out);
+}
+
+.error-message.is-visible {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   .throughline — the signature progress element (design.md §4)
+   A single 2px line present on every screen from the first intake question
+   to the results page. Resting color is --line (§3); it fills with --moss
+   as the user progresses. It replaces all progress bars, steppers, and
+   step counters. Markup: <div class="throughline"><div class="throughline-fill"></div></div>
+   Note (§4): the throughline is ABSENT on the landing page — it only
+   appears once the user has entered the experience.
+   -------------------------------------------------------------------------- */
+
+/* Desktop (≥1024px): 2px vertical rail, full viewport height, fixed at the
+   left edge beside the question content (§4/§7). */
+.throughline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100vh;
+  background-color: var(--line);
+}
+
+/* Inner fill segment — starts empty; intake/quiz JS sets
+   --throughline-progress on this element as questions are answered. One
+   custom property drives both responsive orientations (height here, width
+   in the mobile block below), so a single JS value survives viewport
+   rotation. Fill animates over 400ms per §6, sequenced by JS to run just
+   after the question transition settles. */
+.throughline-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--throughline-progress, 0%);
+  background-color: var(--moss);
+  transition: height var(--duration-throughline) var(--ease-out);
+}
+
+/* --------------------------------------------------------------------------
+    .nav-controls — shared container for Back/Next (or Back/Primary)
+    Ensures a guaranteed spatial separation between the left and right
+    actions and prevents visual collision regardless of button label
+    length. Uses flex with space-between so Back sits at the left edge and
+    the primary action sits at the right edge. `gap` enforces a minimum
+    separation (var(--space-4)) even if buttons wrap on very narrow widths.
+    This class is applied in both `intake.js` and `quiz-engine.js`.
+    -------------------------------------------------------------------------- */
+.nav-controls {
+   display: flex;
+   align-items: center;
+   justify-content: space-between; /* Back left, primary right */
+   gap: var(--space-4);
+}
+
+.nav-controls > * {
+   /* Ensure controls do not collapse visually; let the gap guarantee
+       minimum spacing even when label length grows. */
+   flex: 0 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+    Results page link layout tweaks
+    Ensure each bottom link is its own block-level element and add a
+    hairline divider above the Retake group. Spacing uses the --space
+    tokens from tokens.css so layout stays consistent with the design.
+    -------------------------------------------------------------------------- */
+.results-contact {
+   margin-top: var(--space-4);
+   margin-bottom: var(--space-4);
+}
+.results-contact .btn-text {
+   display: block;
+   margin-bottom: var(--space-2);
+}
+.results-retake-group {
+   margin-top: 0; /* divider enforces the visual break */
+}
+.results-divider {
+   height: 1px;
+   background-color: var(--line);
+   margin-top: var(--space-6);
+   margin-bottom: var(--space-6);
+}
+.results-retake-group .btn-text {
+   display: block;
+}
+
+/* --------------------------------------------------------------------------
+    Site-wide top-left Home link
+    A small, quiet text action positioned so it never collides with the
+    throughline on any viewport >= 360px. It reuses the btn-text palette
+    but is positioned and sized specifically for this purpose. It does
+    not clear storage — navigation only.
+    -------------------------------------------------------------------------- */
+.site-home {
+   position: fixed;
+   top: var(--space-2);
+   left: calc(var(--space-2) + 8px);
+   z-index: 1000;
+   display: inline-block;
+   color: var(--moss);
+   font-family: var(--font-body);
+   font-size: var(--text-label);
+   font-weight: var(--weight-label);
+   text-decoration: underline;
+}
+
+@media (max-width: 1023px) {
+   /* On mobile the throughline becomes a top bar; ensure the Home link
+       sits clearly below it and never overlaps. */
+   .site-home {
+      top: calc(var(--space-2) + 6px);
+      left: var(--space-2);
+   }
+}
+
+/* Mobile (<1024px): the rail collapses to a thin horizontal bar under the
+   fixed header (§4/§7 — mandatory fallback, §10). The fixed header does
+   not exist yet, so the bar sits at the top of the viewport for now; a
+   later batch offsets it to the header's bottom edge. The fill runs along
+   width instead of height. */
+@media (max-width: 1023px) {
+  .throughline {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+  }
+
+  .throughline-fill {
+    width: var(--throughline-progress, 0%);
+    height: 100%;
+    transition: width var(--duration-throughline) var(--ease-out);
+  }
+}

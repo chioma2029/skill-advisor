@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Contact an adviser for help understanding your assessment results or to provide feedback." />
+    <title>Contact: Soft Skill Development</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/contact.css" />
+  </head>
+  <body>
+        <!-- design.md §7 — contact is a traditional support form (the
+         one-thing-at-a-time discipline is relaxed here), but it keeps the
+         same hairline-border inputs, type system, and restraint: no cards,
+         no icons. No throughline on this page — §4 runs the motif from the
+         first intake question to the results screen, and contact sits
+         outside that journey. -->
+        <a class="btn-text site-home" href="index.html">Home</a>
+
+        <main class="contact-screen">
+      <div class="contact-container">
+        <h1>Talk to an adviser.</h1>
+
+        <p class="contact-byline">Built by Chioma Mmadu</p>
+
+        <!-- novalidate lets contact.js own validation entirely (§8: inline
+             errors, never browser popups). Each field reuses the shared
+             .input-underline control and .error-message slot from
+             components.css; the textarea adds .contact-message for height. -->
+        <form class="contact-form" id="contact-form" novalidate>
+          <div class="contact-field">
+            <label class="contact-label" for="contact-name">Name</label>
+            <input
+              class="input-underline"
+              type="text"
+              id="contact-name"
+              name="name"
+              autocomplete="name"
+              placeholder="Caleb"
+              aria-describedby="contact-name-error"
+            />
+            <p class="error-message" id="contact-name-error" aria-live="polite"></p>
+          </div>
+
+          <div class="contact-field">
+            <label class="contact-label" for="contact-email">Email</label>
+            <input
+              class="input-underline"
+              type="email"
+              id="contact-email"
+              name="email"
+              autocomplete="email"
+              placeholder="student.id@bse.ac.mu"
+              aria-describedby="contact-email-error"
+            />
+            <p class="error-message" id="contact-email-error" aria-live="polite"></p>
+          </div>
+
+          <div class="contact-field">
+            <label class="contact-label" for="contact-message">Message</label>
+            <textarea
+              class="input-underline contact-message"
+              id="contact-message"
+              name="message"
+              rows="4"
+              placeholder="What would you like to talk about?"
+              aria-describedby="contact-message-error"
+            ></textarea>
+            <p class="error-message" id="contact-message-error" aria-live="polite"></p>
+          </div>
+
+          <button class="btn-primary" type="submit">Send Message</button>
+        </form>
+      </div>
+    </main>
+
+    <script src="js/contact.js"></script>
+  </body>
+</html>

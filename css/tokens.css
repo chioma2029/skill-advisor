@@ -1,0 +1,115 @@
+/* ==========================================================================
+   TOKENS.CSS — SINGLE SOURCE OF TRUTH FOR DESIGN TOKENS
+   ==========================================================================
+   Every color, font, type size, spacing step, radius, and motion value in
+   this product is defined here, 1:1 with design.md. All other stylesheets
+   reference these tokens via var(--...) and never hard-code values.
+
+   This file contains tokens ONLY. No layout rules, no component rules, no
+   selectors other than :root (plus the one mobile breakpoint block that
+   swaps type-scale values). If a rule here targets anything else, it
+   belongs in base.css or components.css instead.
+   ========================================================================== */
+
+/* Fonts (design.md §5; anti-slop §2 — these three families are the only
+   ones in the entire product). Loaded via @import so the font declaration
+   lives inside the token file itself: one source, shared by all four
+   pages, no per-page duplication. Spectral italic 400 is included because
+   §5 calls for sparing italic emphasis in display text. */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap");
+
+:root {
+  /* ----------------------------------------------------------------------
+     Colors — design.md §3. Usage rules, not just values:
+     --paper: every background, no exceptions.
+     --ink:   body text, headlines, icon strokes.
+     --moss:  the ONLY color for CTAs, active states, .is-valid, links.
+     --clay:  reserved for timer-warning and streak moments — nothing else.
+     --brick: error states only (.is-invalid border, .error-message text).
+     --line:  hairline dividers, resting borders, resting throughline.
+     ---------------------------------------------------------------------- */
+  --paper: #F0EEE8;
+  --ink: #1C1F1B;
+  --moss: #3F5D48;
+  --clay: #B8703E;
+  --brick: #A6432F;
+  --line: #DDD9CF;
+
+  /* ----------------------------------------------------------------------
+     Font families — design.md §5. Fallback is the bare generic family
+     only, for load failure ("no fallback stack beyond system sans/serif").
+     ---------------------------------------------------------------------- */
+  --font-display: "Spectral", serif;        /* question prompts, headlines, results title */
+  --font-body: "Archivo", sans-serif;       /* body copy, buttons, labels, inputs */
+  --font-data: "IBM Plex Mono", monospace;  /* timer, question counter, score numerals */
+
+  /* ----------------------------------------------------------------------
+     Type scale — design.md §5 (1.25 ratio off a 16px root).
+     Desktop values. The mobile breakpoint block below swaps the four sizes
+     that differ on mobile; button/label (15px) and error (13px) are
+     identical in both columns, so they are never redefined.
+     ---------------------------------------------------------------------- */
+  --text-question: 32px; /* Spectral 400 — question prompt, the "hero" of each screen */
+  --text-headline: 40px; /* Spectral 500 — page headline, only one per page */
+  --text-body: 17px;     /* Archivo 400 — body / answer / paragraph */
+  --text-label: 15px;    /* Archivo 600 — buttons and labels, sentence case */
+  --text-counter: 14px;  /* IBM Plex Mono 500 — counter / timer / score numerals */
+  --text-error: 13px;    /* Archivo 500 — error message */
+
+  --weight-question: 400;
+  --weight-headline: 500;
+  --weight-body: 400;
+  --weight-label: 600;
+  --weight-counter: 500;
+  --weight-error: 500;
+
+  --leading-body: 1.6;      /* §5 — body line-height */
+  --tracking-label: 0.01em; /* §5 — button/label letter-spacing */
+
+  /* ----------------------------------------------------------------------
+     Spacing — 8px base unit (design.md frontmatter + §7). Vertical rhythm
+     between major elements uses multiples of 8 (24, 32, 48, 64).
+     ---------------------------------------------------------------------- */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-7: 56px;
+  --space-8: 64px;
+
+  /* ----------------------------------------------------------------------
+     Radius — design.md frontmatter: 2px for inputs and buttons, nowhere
+     else. This product has no cards and no larger radii.
+     ---------------------------------------------------------------------- */
+  --radius: 2px;
+
+  /* ----------------------------------------------------------------------
+     Motion — design.md §6. One duration/easing system, no exceptions.
+     No spring, elastic, or bounce curves exist anywhere in this codebase.
+     ---------------------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1); /* anything appearing */
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);    /* anything leaving */
+  --duration-press: 100ms;        /* button press opacity dip */
+  --duration-focus: 150ms;        /* input focus border, error message fade */
+  --duration-question-out: 220ms; /* outgoing question fade/slide */
+  --duration-question-in: 280ms;  /* incoming question settle */
+  --delay-question-in: 80ms;      /* overlap between outgoing/incoming */
+  --duration-throughline: 400ms;  /* throughline fill on progress update */
+}
+
+/* --------------------------------------------------------------------------
+   Mobile type scale — design.md §5, mobile column. Uses the product's
+   single 1024px breakpoint (the same breakpoint where the throughline
+   collapses from rail to top bar, §4/§7). Only the four sizes that change
+   are redefined.
+   -------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  :root {
+    --text-question: 24px;
+    --text-headline: 28px;
+    --text-body: 16px;
+    --text-counter: 13px;
+  }
+}

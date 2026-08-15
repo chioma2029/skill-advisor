@@ -1,0 +1,51 @@
+/* ==========================================================================
+   QUIZ.CSS — intake/quiz screen layout only (quiz.html)
+   Implements design.md §7 (intake & quiz screens). Positioning and the
+   question-prompt typography application only: tokens live in tokens.css,
+   shared components in components.css.
+   ========================================================================== */
+
+/* §7 — content vertically centered in the viewport with nothing else on
+   screen. The calc() subtracts the top + bottom body padding set in
+   base.css so the centering is true to the viewport. */
+.quiz-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--space-6));
+}
+
+/* §7 — question column max width ~560px. At ≥1024px the throughline rail
+   is fixed to the viewport's left edge (components.css), so this centered
+   column sits naturally to its right (§4). Below 1024px the rail becomes
+   the top bar and the column simply centers. */
+.question-container {
+  width: 100%;
+  max-width: 560px;
+}
+
+/* Question prompt — §5 "question prompt" role: Spectral 400, 32px desktop /
+   24px mobile via tokens; the single largest, most confident text on
+   screen and the hero of every intake/quiz screen. 32px (8px unit) of air
+   between the prompt and the input. */
+.question-prompt {
+  font-family: var(--font-display);
+  font-size: var(--text-question);
+  font-weight: var(--weight-question);
+  line-height: 1.3;
+  margin-bottom: var(--space-4);
+}
+
+/* 32px (8px unit) between the input and the single action. When shown, the
+   .error-message (components.css) sits directly below the input inside
+   this gap, per §8. */
+.question-container .btn-primary {
+  margin-top: var(--space-4);
+}
+
+/* Quiz engine stub — the real quiz renders into #quiz-root in the next
+   batch; until then it reads as plain body text (§5 body role). */
+#quiz-root {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}

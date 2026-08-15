@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A quiet self-reflection assessment to surface your soft-skill strengths and next steps." />
+    <title>Soft Skill Development</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/landing.css" />
+  </head>
+  <body>
+    <!-- design.md §4: the throughline is deliberately ABSENT on the landing
+         page — it only appears once the user enters the experience, on
+         quiz.html. No navigation bar and no footer anywhere on this page
+         (§7): one column, one decision. -->
+    <main class="landing">
+      <div class="landing-inner">
+        <!-- §7: single centered column, ~640px max for the text block.
+             Order is headline → body → single action, separated by
+             multiples of the 8px unit. The headline uses the §5 page
+             headline rule (Spectral 500, one per page). -->
+        <div class="landing-copy">
+          <h1>A few honest questions about how you work with people.</h1>
+          <p>
+            This is a short self-assessment for new students. Answer honestly
+            and leave with a clear picture of your strengths in communication,
+            critical thinking, time management, and leadership. It also
+            provides plain guidance on what to work on next.
+          </p>
+        </div>
+
+        <!-- §8: one primary CTA, sentence case, naming the actual action —
+             never "Submit". Links straight into the intake flow. -->
+        <div class="landing-actions">
+          <a class="btn-primary" href="quiz.html">Take an Assessment</a>
+        </div>
+
+        <!-- §7/§9: hero image — real asset supplied at /assets/hero-image.jpeg.
+             The image complements the copy and sits below the CTA so the
+             headline reads first. -->
+        <img
+          class="landing-hero"
+          src="/assets/hero-image.jpeg"
+          alt="Watercolor-style window scene: an open notebook on a wooden table beside a cup of tea and a potted plant, soft natural light through a window"
+        />
+      </div>
+    </main>
+  </body>
+</html>

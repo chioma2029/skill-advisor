@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Personalised results and a simple bar chart showing your soft-skill strengths and recommended next steps." />
+    <title>Results: Soft Skill Development</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/results.css" />
+  </head>
+  <body>
+    <!-- design.md §4 — the throughline resolves here: the journey is
+         complete, so it sits as a static, fully-filled line beside the
+         results summary (no more animation). It is purely decorative on this
+         screen — the results content itself conveys the outcome — so it is
+         hidden from assistive tech rather than announced. -->
+    <div class="throughline throughline-complete" aria-hidden="true">
+      <div class="throughline-fill"></div>
+    </div>
+
+    <a class="btn-text site-home" href="index.html">Home</a>
+
+    <!-- design.md §7 — the one screen allowed to show the full picture at
+         once: headline → feedback paragraph → canvas bar chart → next-step
+         recommendation → "Contact an Adviser" text link. results.js builds
+         all of it from sessionStorage, after a guard that redirects to
+         index.html when the intake/quiz data is missing. -->
+    <main class="results-screen">
+      <div class="results-container" id="results-root"></div>
+    </main>
+
+    <!-- quiz-questions.js exposes QUIZ_QUESTIONS, which results.js needs to
+         compute each category's maximum possible raw score; it must load
+         first. results.js then builds the page and draws the chart. -->
+    <script src="js/quiz-questions.js"></script>
+    <script src="js/results.js"></script>
+  </body>
+</html>

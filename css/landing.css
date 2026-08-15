@@ -1,0 +1,70 @@
+/* ==========================================================================
+   LANDING.CSS — landing-page layout only (index.html)
+   Implements design.md §7 (landing layout) and §9 (imagery placement).
+   This file only positions landing content: it does not redefine tokens
+   (tokens.css), global defaults (base.css), or shared components
+   (components.css).
+   ========================================================================== */
+
+/* §7 — single column, generously centered. Flex + margin:auto centers the
+   column vertically and horizontally, and degrades to top-aligned — never
+   clipped — if the content outgrows a short viewport. The calc() subtracts
+   the top + bottom body padding set in base.css. */
+.landing {
+  display: flex;
+  min-height: calc(100vh - var(--space-6));
+}
+
+/* §7 — max content width ~640px for the text block. One column holds the
+   headline, body copy, action, and image so nothing competes for
+   attention. */
+.landing-inner {
+  margin: auto;
+  width: 100%;
+  max-width: 640px;
+}
+
+/* Vertical rhythm, §7 — multiples of the 8px unit: 24px headline → body,
+   32px body → action, 48px action → image. */
+.landing-copy h1 {
+  margin-bottom: var(--space-3);
+}
+
+/* Body copy applies the §5 body role (Archivo, 17px desktop / 16px mobile,
+   line-height 1.6) through tokens — no sizes are invented here. */
+.landing-copy p {
+  margin-bottom: var(--space-4);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+.landing-actions {
+  margin-bottom: var(--space-6);
+}
+
+/* §7/§9 — one hero image that complements rather than dominates: capped at
+   ~45% of the first viewport's height on desktop, full column width,
+   cropped with object-fit. The 3:2 ratio holds a quiet, correctly-sized
+   space even before the real photograph arrives, and the --line background
+   keeps that placeholder space inside the §3 palette. */
+.landing-hero {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  max-height: 45vh;
+  object-fit: cover;
+  background-color: var(--line);
+  /* Subtle desaturation to harmonize external imagery with the site's
+     paper/ink palette per design.md §9. 0.85 reduces saturation slightly
+     without looking artificially muted. */
+  filter: saturate(0.85);
+}
+
+/* ≤767px — shrink the image further so the headline, body copy, and the
+   single action all stay inside the first viewport on a 360px-wide phone
+   (§10 responsive floor). Use 767px to match the mobile fallback in the
+   throughline and ensure reflow below typical tablet widths. */
+@media (max-width: 767px) {
+  .landing-hero {
+    max-height: 36vh;
+  }
+}

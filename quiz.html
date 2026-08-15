@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Answer a short intake and take an assessment to learn your soft-skill strengths in communication, thinking, time management, and leadership." />
+    <title>Quiz: Soft Skill Development</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/quiz.css" />
+  </head>
+  <body>
+    <!-- The throughline — design.md §4. This screen is its first appearance
+         (the product's one "arrival" moment; it is absent on the landing
+         page). One element serves both responsive states from
+         components.css: a 2px left rail at ≥1024px, a thin top bar below
+         1024px. It spans the FULL 24-step journey (4 intake questions +
+         20 quiz questions): intake.js fills it 1/24 per answered intake
+         question and quiz-engine.js continues the fill from there, both by
+         setting --throughline-progress on the fill. role="progressbar"
+         gives the motif real semantics, since §10 forbids color as the
+         only signal. -->
+    <div
+      class="throughline"
+      id="throughline"
+      role="progressbar"
+      aria-label="Assessment progress"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+    >
+      <div class="throughline-fill" id="throughline-fill"></div>
+    </div>
+
+    <a class="btn-text site-home" href="index.html">Home</a>
+
+    <!-- §7: content vertically centered, max ~560px, exactly one question,
+         one input, one action on screen at a time — no header nav, no
+         footer, nothing else. intake.js renders each question into
+         #question-container, one at a time. -->
+    <main class="quiz-screen">
+      <div class="question-container" id="question-container"></div>
+    </main>
+
+    <script src="js/intake.js"></script>
+    <!-- The quiz engine. Load order matters: data first, then the timer and
+         scoring modules, then the engine that consumes all three. -->
+    <script src="js/quiz-questions.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/scoring.js"></script>
+    <script src="js/quiz-engine.js"></script>
+  </body>
+</html>

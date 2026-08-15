@@ -1,0 +1,99 @@
+/* ==========================================================================
+   BASE.CSS — RESET + GLOBAL DEFAULTS
+   Global document rules only: minimal reset, body defaults, the focus ring,
+   and the reduced-motion cap. No component styles — those live in
+   components.css. Every value comes from tokens.css.
+   ========================================================================== */
+
+/* Box model: padding and border count inside every element's declared size,
+   so token-based padding never distorts layouts. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Strip default margin and padding so all spacing comes from the --space
+   tokens, deliberately. */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* No default list markers — this product carries no decorative chrome. */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Media elements behave as block content and never overflow their
+   container. */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Form controls inherit the design system's typography instead of browser
+   defaults. */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* The document itself: --paper background everywhere (design.md §3 — no
+   section ever gets a different background), --ink text, Archivo as the
+   default face (design.md §5). The scaffold padding keeps placeholder
+   content off the viewport edge until real page layouts land in a later
+   batch. */
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px; /* §5 — root of the 1.25 type-scale ratio */
+  font-weight: var(--weight-body);
+  line-height: var(--leading-body);
+  padding: var(--space-3);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Page headline — the display role from design.md §5: Spectral 500,
+   40px desktop / 28px mobile via --text-headline. Only one per page. */
+h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-headline);
+  font-weight: var(--weight-headline);
+  line-height: 1.2; /* tight leading for display text */
+}
+
+/* Keyboard focus ring — design.md §10 (non-negotiable): a visible 2px
+   --moss outline, offset 2px, on every interactive element. Never
+   outline: none without a replacement. :focus-visible keeps the ring off
+   for mouse clicks. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--moss);
+  outline-offset: 2px;
+}
+
+/* Reduced motion — design.md §6: every transition and animation collapses
+   to a 100ms cap (simple opacity crossfade); nothing moves beyond that. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 100ms !important;
+    animation-duration: 100ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
