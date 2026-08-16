@@ -1,15 +1,17 @@
 /* ==========================================================================
    TIMER.JS — the single countdown timer for the whole quiz
-   One timer for the entire 20-question attempt (never per-question),
-   starting at 8 minutes (480 seconds). Displayed top-right of the quiz
-   viewport in the mono/data typography role (design.md §5/§8): plain
-   MM:SS numerals, --ink at 60% opacity, switching to --clay (full
-   opacity) once remaining time drops below 20% of the total (under 96
-   seconds) — a color change only; no flashing, no shaking (§8).
+   One timer for the entire quiz attempt, set to 120 seconds (2 minutes)
+   per the requirement. Displayed top-right of the quiz viewport in the
+   mono/data typography role (design.md §5/§8): plain MM:SS numerals,
+   --ink at 60% opacity, switching to --clay (full opacity) once remaining
+   time drops below 20% of the total. This is intentional: the 20% rule
+   scales with duration, so a 2-minute quiz warns at 24 seconds remaining,
+   not at a fixed 24-second threshold that would be unrelated to the full
+   duration. No flashing, no shaking (§8).
 
    INTERVAL LOGIC (assignment requirement: setInterval / clearInterval)
    ---------------------------------------------------------------------
-   start() records a wall-clock end time (endsAt = now + 480s) and opens
+   start() records a wall-clock end time (endsAt = now + 120s) and opens
    ONE setInterval that ticks four times a second. Every tick re-derives
    the remaining time from the wall clock instead of decrementing a
    counter, so the display can never drift even if a tick runs late (a
@@ -27,8 +29,10 @@
 (function () {
   "use strict";
 
-  var TOTAL_SECONDS = 480;                    /* 8 minutes for the whole quiz */
-  var WARNING_SECONDS = TOTAL_SECONDS * 0.2;  /* 96s — the <20% color switch */
+  /* 120 seconds total for the assessment. The 20% warning rule intentionally
+     scales with the full duration, so at 120s it triggers at 24s remaining. */
+  var TOTAL_SECONDS = 120;
+  var WARNING_SECONDS = TOTAL_SECONDS * 0.2;  /* 20% of total duration */
   var TICK_MS = 250;                          /* 4 ticks/second keeps the display crisp */
 
   var intervalId = null;      /* the live setInterval id, or null when stopped */

@@ -57,10 +57,39 @@
     var email = value.trim();
     var standard = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
     var institutional = /^[A-Za-z0-9.]+@bse\.ac\.mu$/;
-    if (standard.test(email) || institutional.test(email)) {
-      return true;
+
+    /* Block list of common personal/personal-provider domains. This list
+       intentionally lives here as an array so it can be extended later
+       without changing validation logic. Only the domain portion is
+       compared; subdomains of a blocked provider are also rejected. */
+    var blockedDomains = [
+      "gmail.com",
+      "yahoo.com",
+      "outlook.com",
+      "hotmail.com",
+      "icloud.com",
+      "aol.com",
+      "live.com",
+      "msn.com",
+      "protonmail.com"
+    ];
+
+    // First, ensure the email matches an accepted format.
+    if (!(standard.test(email) || institutional.test(email))) {
+      return "Enter a valid email. For example, name@example.com or student.id@bse.ac.mu.";
     }
-    return "Enter a valid email. For example, name@example.com or student.id@bse.ac.mu.";
+
+    // Extract domain and check the block list (case-insensitive).
+    var parts = email.split("@");
+    var domain = (parts[1] || "").toLowerCase();
+    for (var i = 0; i < blockedDomains.length; i++) {
+      var d = blockedDomains[i];
+      if (domain === d || domain.endsWith("." + d)) {
+        return "Thanks for checking, please use your institutional mail address so we can reach you properly.";
+      }
+    }
+
+    return true;
   }
 
   /* validateMessage — required, and at least 10 characters once trimmed.

@@ -41,15 +41,21 @@
   var THROUGHLINE = document.getElementById("throughline");
   var THROUGHLINE_FILL = document.getElementById("throughline-fill");
 
-  /* ---------------------- journey shape -------------------------------- */
-  var TOTAL_STEPS = 24; /* 4 intake + 20 quiz — the throughline spans all */
-  var INTAKE_STEPS = 4;
-  var QUIZ_TOTAL = window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : 20;
+    /* ---------------------- journey shape -------------------------------- */
+    /* Compute journey steps dynamically: number of intake steps plus the
+      real quiz question count. This prevents hardcoded drift (previously
+      24 was used for 4 + 20). INTAKE_STEPS is the intake question count
+      (kept at 4), QUIZ_TOTAL is derived from window.QUIZ_QUESTIONS when
+      available, and TOTAL_STEPS is their sum. */
+    var INTAKE_STEPS = 4;
+    var QUIZ_TOTAL = window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : 20;
+    var TOTAL_STEPS = INTAKE_STEPS + QUIZ_TOTAL;
 
   /* ---------------------- runtime state -------------------------------- */
   var currentIndex = 0; /* 0-based index into QUIZ_QUESTIONS */
   var answers = {}; /* keyed by question id with selected option index or hotspot id */
   var disabled = false; /* when time runs out or finishing */
+  var finalizing = false; /* prevents duplicate finishQuiz() runs */
   var furthestIndex = -1; /* highest quiz index the user has reached; only increases */
 
   /* ---------------------- helpers: DOM creation ------------------------- */
@@ -128,8 +134,13 @@
   }
 
   function throughlineForIndex(ansCount) {
+    // Recompute dynamic total in case QUIZ_QUESTIONS was loaded after
+    // initial script evaluation. This keeps the percent calculation
+    // accurate even when the question count changes.
+    var dynamicQuiz = window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : QUIZ_TOTAL;
+    var dynamicTotal = INTAKE_STEPS + dynamicQuiz;
     var filled = INTAKE_STEPS + ansCount; /* answered steps so far */
-    return (filled / TOTAL_STEPS) * 100;
+    return (filled / dynamicTotal) * 100;
   }
 
   /* computeThroughlinePercent — the throughline fill is driven by the
@@ -138,16 +149,19 @@
      AppProgress helper when present so intake and quiz stay in sync. */
   function computeThroughlinePercent() {
     if (window.AppProgress && typeof window.AppProgress.computePercent === 'function') {
-      return window.AppProgress.computePercent(TOTAL_STEPS, INTAKE_STEPS, QUIZ_TOTAL);
+      return window.AppProgress.computePercent(INTAKE_STEPS + (window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : QUIZ_TOTAL), INTAKE_STEPS, window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : QUIZ_TOTAL);
     }
     var answered = Math.max(0, Math.min(QUIZ_TOTAL, furthestIndex + 1));
-    return ((INTAKE_STEPS + answered) / TOTAL_STEPS) * 100;
+    var dynamicQuiz = window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : QUIZ_TOTAL;
+    var dynamicTotal = INTAKE_STEPS + dynamicQuiz;
+    return ((INTAKE_STEPS + answered) / dynamicTotal) * 100;
   }
 
   /* ---------------------- counter element ------------------------------ */
   function buildCounter(index) {
     var counter = el("div", { className: "quiz-counter" });
-    counter.textContent = String(index + 1).padStart(2, "0") + " / " + String(QUIZ_TOTAL).padStart(2, "0");
+    var dynamicQuiz = window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : QUIZ_TOTAL;
+    counter.textContent = String(index + 1).padStart(2, "0") + " / " + String(dynamicQuiz).padStart(2, "0");
     return counter;
   }
 
@@ -531,7 +545,8 @@
   }
 
   function finishQuiz() {
-    if (disabled) return; // prevent double-run
+    if (finalizing) return;
+    finalizing = true;
     disabled = true;
 
     // Stop and hide the timer.
@@ -541,9 +556,11 @@
     }
 
     // Ask QuizScoring for the final tally and persist to sessionStorage
-    // under the required key "quizResults". Then replace the UI with
-    // the results placeholder (results.js will later render the full
-    // experience when the user navigates to results.html).
+    // under the required key "quizResults". This is the same completion
+    // path used for a normal end-of-quiz, so unanswered items still count as
+    // 0 and results.html behaves identically whether the user finished
+    // normally or timed out. We intentionally reuse this path instead of
+    // creating a separate timeout-scoring branch.
     var tally = (window.QuizScoring && typeof window.QuizScoring.getFinalTally === "function") ? window.QuizScoring.getFinalTally() : null;
     try {
       sessionStorage.setItem("quizResults", JSON.stringify(tally || {}));
@@ -553,8 +570,14 @@
 
     // Replace the UI with the final stub and navigate the user to
     // results.html after a short delay so they see the completion.
-    var out = QUIZ_ROOT.querySelector(".quiz-block");
+    var out = QUIZ_ROOT.querySelector(".quiz-block, .quiz-timeout-notice");
     var finish = buildFinishStub();
+    if (!out) {
+      window.setTimeout(function () {
+        window.location.href = "results.html";
+      }, 400);
+      return;
+    }
     transitionSwap(out, finish, function () {
       // Also resolve the throughline to full completion visually (100%)
       updateThroughline(100);
@@ -566,23 +589,61 @@
     });
   }
 
-  function onTimerZero() {
-    // When the timer hits zero mid-quiz, disable interactions, apply
-    // a subtle overlay, then finalize the attempt using whatever
-    // answers were submitted so far (unanswered = 0 contribution).
-    disabled = true;
-    var overlay = el("div", { className: "quiz-timeout-overlay" });
-    overlay.style.position = "absolute";
-    overlay.style.inset = "0";
-    overlay.style.background = "rgba(240,238,232,0.6)"; // muted --paper tint
-    overlay.style.pointerEvents = "none";
-    var block = QUIZ_ROOT.querySelector(".quiz-block");
-    if (block) block.appendChild(overlay);
+  function lockCurrentQuestionControls() {
+    var block = QUIZ_ROOT ? QUIZ_ROOT.querySelector(".quiz-block") : null;
+    if (!block) return;
+    var controls = block.querySelectorAll("button, input, textarea, select, audio");
+    controls.forEach(function (node) {
+      if (typeof node.disabled === "boolean") {
+        node.disabled = true;
+      }
+      if (node.tagName === "BUTTON") {
+        node.setAttribute("aria-disabled", "true");
+      }
+    });
+  }
 
-    // Wait 600ms for the subtle overlay to register, then finish.
-    window.setTimeout(function () {
+  function buildTimeoutNotice() {
+    var notice = el("div", { className: "quiz-timeout-notice" });
+    notice.setAttribute("role", "status");
+    notice.setAttribute("aria-live", "polite");
+    notice.style.width = "100%";
+    notice.style.textAlign = "center";
+    notice.style.padding = "0.5rem 0";
+    notice.style.fontFamily = "'Spectral', Georgia, serif";
+    notice.style.fontSize = "clamp(1.4rem, 2.5vw, 2rem)";
+    notice.style.lineHeight = "1.5";
+    notice.style.color = getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#1C1F1B";
+    var lead = document.createElement("span");
+    var clay = getComputedStyle(document.documentElement).getPropertyValue("--clay").trim() || "#B8703E";
+    lead.textContent = "Time's up.";
+    lead.style.color = clay;
+    notice.appendChild(lead);
+    notice.appendChild(document.createTextNode(" Let's see what we found."));
+    return notice;
+  }
+
+  function onTimerZero() {
+    // Time has run out. Lock the current question immediately, then show a
+    // calm on-screen notice before reusing the normal completion path.
+    disabled = true;
+    lockCurrentQuestionControls();
+
+    var block = QUIZ_ROOT ? QUIZ_ROOT.querySelector(".quiz-block") : null;
+    if (!block) {
       finishQuiz();
-    }, 600);
+      return;
+    }
+
+    var notice = buildTimeoutNotice();
+    transitionSwap(block, notice, function () {
+      // Hold the notice briefly so the user can read it, then reuse the
+      // existing finishQuiz() path to save results and navigate exactly the
+      // same way a normal completion would.
+      window.setTimeout(function () {
+        finishQuiz();
+      }, 1800);
+    });
   }
 
   /* ---------------------- engine lifecycle ---------------------------- */
