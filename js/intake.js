@@ -43,7 +43,7 @@
       id: "name",
       prompt:
         "Hi! Welcome to Soft Skill Development. Before we begin, may I have your name?",
-      placeholder: "Caleb",
+      placeholder: "Christine Smith",
       type: "text",
       autocomplete: "name",
       /* Letters and spaces only: letter-words separated by single spaces,

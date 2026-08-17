@@ -1,5 +1,5 @@
 /* ==========================================================================
-   QUIZ-ENGINE.JS — renders the 20-question quiz and ties Timer + Scoring
+   QUIZ-ENGINE.JS — renders the 10-question quiz and ties Timer + Scoring
    Responsibilities:
    - Start the QuizTimer and QuizScoring when the intake confirmation hands
      control to the quiz (the intake flow replaces the intake block with

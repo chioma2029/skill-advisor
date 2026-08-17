@@ -27,8 +27,8 @@
 (function () {
   "use strict";
 
-  var TOTAL_SECONDS = 480;                    /* 8 minutes for the whole quiz */
-  var WARNING_SECONDS = TOTAL_SECONDS * 0.2;  /* 96s — the <20% color switch */
+  var TOTAL_SECONDS = 120;                    /* 2 minutes for the whole quiz */
+  var WARNING_SECONDS = TOTAL_SECONDS * 0.2;  /* 24s — the <20% color switch */
   var TICK_MS = 250;                          /* 4 ticks/second keeps the display crisp */
 
   var intervalId = null;      /* the live setInterval id, or null when stopped */
