@@ -25,21 +25,81 @@
 }
 
 /* Vertical rhythm, §7 — multiples of the 8px unit: 24px headline → body,
-   32px body → action, 48px action → image. */
+   32px body → benefits, 48px benefits → action. */
 .landing-copy h1 {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
+  font-size: var(--text-headline);
+  font-weight: var(--weight-headline);
+  color: var(--ink);
+}
+
+/* Subheading after h1 — sets context */
+.landing-subheading {
+  margin-bottom: var(--space-6);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--ink);
+  opacity: 0.9;
 }
 
 /* Body copy applies the §5 body role (Archivo, 17px desktop / 16px mobile,
    line-height 1.6) through tokens — no sizes are invented here. */
 .landing-copy p {
-  margin-bottom: var(--space-4);
   font-size: var(--text-body);
   line-height: var(--leading-body);
 }
 
+/* Four-column grid showing what the assessment covers */
+.landing-benefits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+  padding: var(--space-4);
+  background-color: rgba(63, 93, 72, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.benefit-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.benefit-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.benefit-text h3 {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  color: var(--ink);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.benefit-text p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  opacity: 0.75;
+  margin: 0;
+}
+
 .landing-actions {
   margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+.landing-note {
+  font-size: 13px;
+  color: var(--ink);
+  opacity: 0.65;
+  margin: var(--space-2) 0 0 0;
+  font-family: var(--font-body);
 }
 
 /* §7/§9 — one hero image that complements rather than dominates: capped at
@@ -59,12 +119,29 @@
   filter: saturate(0.85);
 }
 
-/* ≤767px — shrink the image further so the headline, body copy, and the
-   single action all stay inside the first viewport on a 360px-wide phone
-   (§10 responsive floor). Use 767px to match the mobile fallback in the
-   throughline and ensure reflow below typical tablet widths. */
+/* ≤767px — mobile responsive adjustments */
 @media (max-width: 767px) {
   .landing-hero {
     max-height: 36vh;
+  }
+
+  /* Stack benefits grid into 2 columns on mobile for readability */
+  .landing-benefits {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+    padding: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .benefit-icon {
+    font-size: 28px;
+  }
+
+  .benefit-text h3 {
+    font-size: 14px;
+  }
+
+  .benefit-text p {
+    font-size: 12px;
   }
 }

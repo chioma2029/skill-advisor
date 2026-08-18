@@ -28,7 +28,7 @@
      --brick: error states only (.is-invalid border, .error-message text).
      --line:  hairline dividers, resting borders, resting throughline.
      ---------------------------------------------------------------------- */
-  --paper: #F0EEE8;
+  --paper: hsl(150, 21%, 93%);
   --ink: #1C1F1B;
   --moss: #3F5D48;
   --clay: #B8703E;
