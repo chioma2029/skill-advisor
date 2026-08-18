@@ -24,14 +24,18 @@
   /* Checked live each time so a setting change mid-session is respected. */
   var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  /* ---------------------------------------------------------------------
-     Journey shape — the throughline spans the FULL journey, not just the
-     intake: 4 intake questions + 20 quiz questions = 24 steps. Each
-     answered intake question therefore fills 1/24 of the line, and
-     quiz-engine.js continues the fill from wherever intake leaves off
-     (design.md §4 — one continuous motif from first question to results).
-     --------------------------------------------------------------------- */
-  var TOTAL_STEPS = 24;
+    /* ---------------------------------------------------------------------
+      Journey shape — the throughline spans the FULL journey (intake + quiz).
+      Rather than hardcoding "24", compute the total steps from the number
+      of intake questions (QUESTIONS.length) plus the actual quiz questions
+      array length when available. This prevents drift if the quiz length
+      changes in future. When QUIZ_QUESTIONS is not yet loaded (early in
+      startup), fall back to the historical value of 20.
+      --------------------------------------------------------------------- */
+    function totalSteps() {
+     var quizLen = window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : 20;
+     return QUESTIONS.length + quizLen;
+    }
 
   /* ---------------------------------------------------------------------
      The four intake questions. Each validate() returns true when the value
@@ -71,10 +75,39 @@
         var email = value.trim();
         var standard = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
         var institutional = /^[A-Za-z0-9.]+@bse\.ac\.mu$/;
-        if (standard.test(email) || institutional.test(email)) {
-          return true;
+
+        /* Block list of common personal/personal-provider domains. Kept
+           local here so intake and contact can remain independent while
+           using the same approach; the list is intentionally simple and
+           extendable. */
+        var blockedDomains = [
+          "gmail.com",
+          "yahoo.com",
+          "outlook.com",
+          "hotmail.com",
+          "icloud.com",
+          "aol.com",
+          "live.com",
+          "msn.com",
+          "protonmail.com"
+        ];
+
+        // First check format.
+        if (!(standard.test(email) || institutional.test(email))) {
+          return "Enter a valid email. For example, name@example.com or student.id@bse.ac.mu.";
         }
-        return "Enter a valid email. For example, name@example.com or student.id@bse.ac.mu.";
+
+        // Then check domain against block list.
+        var parts = email.split("@");
+        var domain = (parts[1] || "").toLowerCase();
+        for (var i = 0; i < blockedDomains.length; i++) {
+          var d = blockedDomains[i];
+          if (domain === d || domain.endsWith("." + d)) {
+            return "Thanks for checking — please use your institutional or organisational email address so we can reach you properly.";
+          }
+        }
+
+        return true;
       }
     },
     {
@@ -284,11 +317,9 @@
     window.AppProgress.furthestIntake = Math.max(window.AppProgress.furthestIntake, current);
     current += 1;
 
-    /* §4/§6 — each answered question fills 1/24 of the throughline (the
-       line spans all 24 steps: 4 intake + 20 quiz, see TOTAL_STEPS); the
-       update uses the shared progress tracker and is deferred until the
-       question transition settles. */
-    var progress = window.AppProgress.computePercent(TOTAL_STEPS, QUESTIONS.length, 20);
+     /* §4/§6 — compute throughline progress using the real current total
+       steps so the fill never drifts if the quiz length changes. */
+     var progress = window.AppProgress.computePercent(totalSteps(), QUESTIONS.length, window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : 20);
 
     var nextBlock =
       current < QUESTIONS.length
@@ -347,13 +378,13 @@
 
     var outgoing = container.querySelector(".question-block");
     transitionSwap(outgoing, stub, function () {
-      /* The throughline covers the full 24-step journey; delegate the
-         visual fill to the shared progress tracker so quiz and intake
-         remain in sync. */
+      /* The throughline covers the full journey. Compute the real total
+         steps dynamically and ask the shared tracker for the percent so
+         intake and quiz remain in sync. */
       if (window.AppProgress && typeof window.AppProgress.computePercent === 'function') {
-        updateThroughline(window.AppProgress.computePercent(TOTAL_STEPS, QUESTIONS.length, 20));
+        updateThroughline(window.AppProgress.computePercent(totalSteps(), QUESTIONS.length, window.QUIZ_QUESTIONS ? window.QUIZ_QUESTIONS.length : 20));
       } else {
-        updateThroughline((QUESTIONS.length / TOTAL_STEPS) * 100);
+        updateThroughline((QUESTIONS.length / totalSteps()) * 100);
       }
     });
   }
