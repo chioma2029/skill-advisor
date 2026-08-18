@@ -29,15 +29,8 @@
 (function () {
   "use strict";
 
-<<<<<<< HEAD
   var TOTAL_SECONDS = 120;                    /* 2 minutes for the whole quiz */
   var WARNING_SECONDS = TOTAL_SECONDS * 0.2;  /* 24s — the <20% color switch */
-=======
-  /* 120 seconds total for the assessment. The 20% warning rule intentionally
-     scales with the full duration, so at 120s it triggers at 24s remaining. */
-  var TOTAL_SECONDS = 120;
-  var WARNING_SECONDS = TOTAL_SECONDS * 0.2;  /* 20% of total duration */
->>>>>>> 11111963c9dd553ca1d20e9fecafb19d55ed9cb2
   var TICK_MS = 250;                          /* 4 ticks/second keeps the display crisp */
 
   var intervalId = null;      /* the live setInterval id, or null when stopped */

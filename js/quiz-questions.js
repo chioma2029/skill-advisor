@@ -1,9 +1,9 @@
 /* ==========================================================================
    QUIZ-QUESTIONS.JS — the 10-question assessment data
-   Reduced from 20 to 10 questions (2-3 per category): Communication, 
-   Critical Thinking, Time Management, Leadership. Every question is 
-   scenario-based and grounded in situations a new university student 
-   actually meets (group projects, deadlines, disagreements, unclear 
+   Reduced from 20 to 10 questions (2-3 per category): Communication,
+   Critical Thinking, Time Management, Leadership. Every question is
+   scenario-based and grounded in situations a new university student
+   actually meets (group projects, deadlines, disagreements, unclear
    instructions) — never trivia, never yes/no, never abstract self-description.
 
    Question shape:
@@ -16,30 +16,19 @@
                       label and categoryPoints (1–5) awarded for picking it.
                       Points are varied realistically: strong answers earn
                       more, weak ones fewer — never a flat scale.
-     imageSrc/alt   — hotspot question only (see placeholder note below).
+     imageSrc/alt   — hotspot question only.
      hotspots       — hotspot question only: percentage-based regions
                       (x, y, width, height relative to the image, so they
                       stay accurate at any responsive size) plus the
                       categoryPoints clicking that region awards and a
                       label used as the region's accessible name.
-     audioSrc       — audio question only (see placeholder note below).
-
-   PLACEHOLDER ASSETS — replace before submission:
-     (none remain in this file) — audio prompt has been provided at /assets/audio-prompt-1.mp3
+     audioSrc       — audio question only.
    ========================================================================== */
 (function () {
   "use strict";
 
-  // Reduce the quiz to 10 questions total: keep the two media items and
-  // select 8 choice questions (2 per category) from the existing set.
   window.QUIZ_QUESTIONS = [
-<<<<<<< HEAD
-    /* ==================================================================
-       COMMUNICATION — 2 questions (including audio)
-       ================================================================== */
-    {
-=======
-    /* COMMUNICATION (keep 2 choice + 1 audio media preserved elsewhere) */
+    /* COMMUNICATION */
     {
       id: "comm-meeting-split",
       category: "Communication",
@@ -54,7 +43,6 @@
       ]
     },
     {
->>>>>>> 11111963c9dd553ca1d20e9fecafb19d55ed9cb2
       id: "comm-unclear-brief",
       category: "Communication",
       type: "choice",
@@ -67,7 +55,6 @@
         { label: "Pick whichever format you are better at and hope for the best.", categoryPoints: 1 }
       ]
     },
-    /* Preserve audio media question (Communication) */
     {
       id: "comm-audio-voicemail",
       category: "Communication",
@@ -75,43 +62,26 @@
       prompt: "Play the voice note from your project partner, then choose the reply that communicates best.",
       audioSrc: "/assets/audio-prompt-1.mp3",
       options: [
-<<<<<<< HEAD
         {
-          label:
-            "Reply acknowledging what they said, restate their concern in your own words, then suggest a time to talk it through.",
+          label: "Reply acknowledging what they said, restate their concern in your own words, then suggest a time to talk it through.",
           categoryPoints: 5
         },
         {
-          label:
-            "Wait a day for things to cool down, then send a short apology.",
+          label: "Wait a day for things to cool down, then send a short apology.",
           categoryPoints: 3
         },
         {
-          label:
-            "Reply right away defending your part of the work, point by point.",
+          label: "Reply right away defending your part of the work, point by point.",
           categoryPoints: 2
         },
         {
-          label:
-            "Forward the voice note to the rest of the group so everyone hears their tone.",
+          label: "Forward the voice note to the rest of the group so everyone hears their tone.",
           categoryPoints: 1
         }
       ]
     },
 
-    /* ==================================================================
-       CRITICAL THINKING — 2 questions (including hotspot)
-       ================================================================== */
-=======
-        { label: "Reply acknowledging what they said, restate their concern in your own words, then suggest a time to talk it through.", categoryPoints: 5 },
-        { label: "Wait a day for things to cool down, then send a short apology.", categoryPoints: 3 },
-        { label: "Reply right away defending your part of the work, point by point.", categoryPoints: 2 },
-        { label: "Forward the voice note to the rest of the group so everyone hears their tone.", categoryPoints: 1 }
-      ]
-    },
-
-    /* CRITICAL THINKING (keep 2 choice + hotspot media preserved) */
->>>>>>> 11111963c9dd553ca1d20e9fecafb19d55ed9cb2
+    /* CRITICAL THINKING */
     {
       id: "ct-perfect-source",
       category: "Critical Thinking",
@@ -124,7 +94,6 @@
         { label: "Quote it as-is. Finding something this perfect is rare.", categoryPoints: 1 }
       ]
     },
-    /* Preserve hotspot media question (Critical Thinking) */
     {
       id: "ct-hotspot-board",
       category: "Critical Thinking",
@@ -139,12 +108,6 @@
         { x: 0, y: 85, width: 100, height: 15, categoryPoints: 1, label: "Notes strip along the bottom" }
       ]
     },
-<<<<<<< HEAD
-
-    /* ==================================================================
-       TIME MANAGEMENT — 3 questions
-       ================================================================== */
-=======
     {
       id: "ct-conflicting-advice",
       category: "Critical Thinking",
@@ -158,8 +121,7 @@
       ]
     },
 
-    /* TIME MANAGEMENT (keep 2 choice) */
->>>>>>> 11111963c9dd553ca1d20e9fecafb19d55ed9cb2
+    /* TIME MANAGEMENT */
     {
       id: "tm-same-week",
       category: "Time Management",
@@ -172,41 +134,6 @@
         { label: "Decide which assignment is worth the least and plan to skip it.", categoryPoints: 1 }
       ]
     },
-<<<<<<< HEAD
-
-    /* ==================================================================
-       LEADERSHIP — 3 questions
-       ================================================================== */
-    {
-      id: "lead-no-volunteer",
-      category: "Leadership",
-      type: "choice",
-      prompt:
-        "Your group needs one person to present the findings to the class next week. After an awkward silence, everyone suddenly finds something interesting on their phone. What do you do?",
-      options: [
-        {
-          label:
-            "Break the silence by offering to present if someone else handles the Q&A, turning the decision into a trade instead of a sacrifice.",
-          categoryPoints: 5
-        },
-        {
-          label:
-            "Suggest drawing lots so the choice is fair.",
-          categoryPoints: 3
-        },
-        {
-          label:
-            "Wait. Someone more experienced will eventually step up.",
-          categoryPoints: 1
-        },
-        {
-          label:
-            "Nominate the quietest member, since they need the practice.",
-          categoryPoints: 1
-        }
-      ]
-    },
-=======
     {
       id: "tm-three-week-project",
       category: "Time Management",
@@ -220,8 +147,31 @@
       ]
     },
 
-    /* LEADERSHIP (keep 2 choice) */
->>>>>>> 11111963c9dd553ca1d20e9fecafb19d55ed9cb2
+    /* LEADERSHIP */
+    {
+      id: "lead-no-volunteer",
+      category: "Leadership",
+      type: "choice",
+      prompt: "Your group needs one person to present the findings to the class next week. After an awkward silence, everyone suddenly finds something interesting on their phone. What do you do?",
+      options: [
+        {
+          label: "Break the silence by offering to present if someone else handles the Q&A, turning the decision into a trade instead of a sacrifice.",
+          categoryPoints: 5
+        },
+        {
+          label: "Suggest drawing lots so the choice is fair.",
+          categoryPoints: 3
+        },
+        {
+          label: "Wait. Someone more experienced will eventually step up.",
+          categoryPoints: 1
+        },
+        {
+          label: "Nominate the quietest member, since they need the practice.",
+          categoryPoints: 1
+        }
+      ]
+    },
     {
       id: "lead-uneven-work",
       category: "Leadership",
@@ -232,41 +182,6 @@
         { label: "Take over coordination yourself and quietly redistribute tasks without announcing it.", categoryPoints: 3 },
         { label: "Tell the strong member privately to slow down so the others can keep up.", categoryPoints: 2 },
         { label: "Say nothing. The imbalance will sort itself out once the others notice.", categoryPoints: 1 }
-      ]
-    },
-    {
-      id: "lead-derailed-meeting",
-      category: "Leadership",
-      type: "choice",
-      prompt: "You are chairing the first meeting of a student society you founded. Ten minutes in, the discussion drifts into an off-topic argument between two members. What do you do?",
-      options: [
-<<<<<<< HEAD
-        {
-          label:
-            "Name the off-topic point, park it for the end of the meeting if there is time, and guide the room back to the agenda.",
-          categoryPoints: 5
-        },
-        {
-          label:
-            "Cut in immediately and call a vote on the original agenda item.",
-          categoryPoints: 2
-        },
-        {
-          label:
-            "End the meeting early and reschedule for when people are more focused.",
-          categoryPoints: 2
-        },
-        {
-          label:
-            "Let the argument run its course. Members need to feel heard in a new society.",
-          categoryPoints: 1
-        }
-=======
-        { label: "Name the off-topic point, park it for the end of the meeting if there is time, and guide the room back to the agenda.", categoryPoints: 5 },
-        { label: "Cut in immediately and call a vote on the original agenda item.", categoryPoints: 2 },
-        { label: "End the meeting early and reschedule for when people are more focused.", categoryPoints: 2 },
-        { label: "Let the argument run its course. Members need to feel heard in a new society.", categoryPoints: 1 }
->>>>>>> 11111963c9dd553ca1d20e9fecafb19d55ed9cb2
       ]
     }
   ];
