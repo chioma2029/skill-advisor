@@ -6,13 +6,68 @@
    (components.css).
    ========================================================================== */
 
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--line);
+  background: rgba(240, 238, 232, 0.82);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.site-header-inner,
+.site-footer-inner {
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.brand,
+.site-nav a,
+.site-footer a {
+  color: var(--moss);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: var(--weight-label);
+}
+
+.brand {
+  letter-spacing: 0.01em;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  background: rgba(240, 238, 232, 0.6);
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink);
+  opacity: 0.7;
+}
+
 /* §7 — single column, generously centered. Flex + margin:auto centers the
    column vertically and horizontally, and degrades to top-aligned — never
    clipped — if the content outgrows a short viewport. The calc() subtracts
    the top + bottom body padding set in base.css. */
 .landing {
   display: flex;
-  min-height: calc(100vh - var(--space-6));
+  min-height: calc(100vh - 150px);
+  padding: var(--space-5) 0 var(--space-4);
 }
 
 /* §7 — max content width ~640px for the text block. One column holds the
@@ -21,7 +76,7 @@
 .landing-inner {
   margin: auto;
   width: 100%;
-  max-width: 640px;
+  max-width: 760px;
 }
 
 /* Vertical rhythm, §7 — multiples of the 8px unit: 24px headline → body,
@@ -52,25 +107,27 @@
 /* Four-column grid showing what the assessment covers */
 .landing-benefits {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--space-3);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 32px;
   margin-bottom: var(--space-8);
-  padding: var(--space-4);
-  background-color: rgba(63, 93, 72, 0.04);
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  padding: var(--space-5) var(--space-4);
+  background-color: rgba(63, 93, 72, 0.03);
+  border: 1px solid rgba(63, 93, 72, 0.12);
+  border-radius: 12px;
 }
 
 .benefit-item {
-  text-align: center;
+  text-align: left;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  padding: 0 10px 0 0;
 }
 
 .benefit-icon {
-  font-size: 36px;
+  font-size: 38px;
   line-height: 1;
+  margin-bottom: 6px;
 }
 
 .benefit-text h3 {
@@ -82,10 +139,10 @@
 }
 
 .benefit-text p {
-  font-size: 13px;
+  font-size: 17px;
   line-height: 1.5;
   color: var(--ink);
-  opacity: 0.75;
+  opacity: 0.8;
   margin: 0;
 }
 
@@ -121,27 +178,50 @@
 
 /* ≤767px — mobile responsive adjustments */
 @media (max-width: 767px) {
-  .landing-hero {
-    max-height: 36vh;
+  .landing {
+    padding-top: var(--space-5);
   }
 
-  /* Stack benefits grid into 2 columns on mobile for readability */
+  .landing-inner {
+    max-width: 100%;
+    padding: 0 12px;
+  }
+
+  .landing-copy h1 {
+    margin-bottom: 20px;
+  }
+
+  .landing-subheading {
+    margin-bottom: var(--space-5);
+  }
+
   .landing-benefits {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-2);
-    padding: var(--space-3);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 18px;
+    padding: 18px 14px 12px;
     margin-bottom: var(--space-6);
+  }
+
+  .benefit-item {
+    padding-right: 0;
   }
 
   .benefit-icon {
     font-size: 28px;
+    margin-bottom: 4px;
   }
 
   .benefit-text h3 {
     font-size: 14px;
+    margin-bottom: 4px;
   }
 
   .benefit-text p {
-    font-size: 12px;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .landing-hero {
+    max-height: 36vh;
   }
 }
